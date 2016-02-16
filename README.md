@@ -1,17 +1,13 @@
 # Space-Truck
-It's game about orbiting in 2D space.
+It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with gravity
 
 ## Gameplay
-Player has to transfer shit from one planet to another with minimal fuel usage.
+Player should defend Earth from asteroids
 
 ## Concepts
-* No phisics for planets -- they will move by predifined (circular?) orbits.
-* Planets will affect ship and small number of asteroids.
-* Planets can orbit other planets.
-* Planets may have space junk on orbit.
-* Space junk and asteroids kill player.
-* There can be sequental number of orgits to visit or non-prdered ones.
-* Target orbits are defined as a range.
-* There will be helper trajectory line before a ship.
-
-![](http://s18.postimg.org/jijrr4sux/map.png)
+* No phisics for Moon -- it will move by circular orbit.
+* Earth and Moon will affect ship and of asteroids.
+* Asteroids kill player
+* Player can refuel by orbition circular orbit over the Moon
+* Asteroids can collide and asteroids can split into chunks
+* [?] There will be helper trajectory line before a ship.
