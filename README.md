@@ -1,4 +1,4 @@
-# Space-Truck
+# AsteroidsN
 It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with gravity
 
 ## Gameplay
