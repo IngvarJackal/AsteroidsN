@@ -3,6 +3,7 @@ package space.truck.entities
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 
 class SpaceObject(internal val img: Texture, internal val world: World, density: Float = 1f) {
@@ -22,6 +23,10 @@ class SpaceObject(internal val img: Texture, internal val world: World, density:
         fixtureDef.shape = shape;
         fixtureDef.density = density;
 
+        val data = body.getMassData();
+        data.center.set(sprite.getX() + sprite.getWidth() / 2, sprite.getY() + sprite.getHeight() / 2);
+        body.setMassData(data);
+
         shape.dispose();
     }
 
@@ -36,5 +41,13 @@ class SpaceObject(internal val img: Texture, internal val world: World, density:
     fun setPosition(x: Float, y: Float) {
         sprite.setPosition(x, y)
         body.setTransform(x, y, body.angle)
+    }
+
+    fun centerMass(): Vector2 {
+        return Vector2(sprite.x + sprite.width / 2, sprite.y + sprite.height / 2)
+    }
+
+    fun center(): Vector2 {
+        return Vector2(sprite.x + sprite.width / 2, 720 - (sprite.y + sprite.height / 2))
     }
 }
