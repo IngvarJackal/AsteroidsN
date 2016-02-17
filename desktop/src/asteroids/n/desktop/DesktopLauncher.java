@@ -1,8 +1,8 @@
-package space.truck.desktop;
+package asteroids.n.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import space.truck.MainClass;
+import asteroids.n.MainClass;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
