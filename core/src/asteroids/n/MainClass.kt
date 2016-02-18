@@ -3,6 +3,8 @@ package asteroids.n
 import asteroids.n.engine.Engine
 import asteroids.n.entities.forces.GravityForce
 import asteroids.n.entities.forces.ThrustForce
+import asteroids.n.entities.objects.SpaceMovableImageObject
+import asteroids.n.entities.objects.SpaceStaticAnimatedObject
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -12,14 +14,15 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import asteroids.n.entities.objects.SpaceMovableObject
-import asteroids.n.entities.objects.SpaceStaticObject
+import asteroids.n.entities.objects.SpaceStaticImageObject
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.utils.TimeUtils
 import java.util.*
 
 class MainClass : ApplicationAdapter() {
     internal var batch: SpriteBatch? = null
-    internal var earth: SpaceStaticObject? = null
-    internal var moon: SpaceMovableObject? = null
+    internal var earth: SpaceStaticAnimatedObject? = null
+    internal var moon: SpaceMovableImageObject? = null
 
     internal var cam: OrthographicCamera? = null
     internal var shapeRenderer: ShapeRenderer? = null
@@ -29,10 +32,10 @@ class MainClass : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
 
-        earth = SpaceStaticObject(Texture("badlogic-small.png"), mass = 100000f)
+        earth = SpaceStaticAnimatedObject("earth", msFrameDelay=5000, mass = 100000f)
         earth!!.position = Vector2(360f, 360f)
 
-        moon = SpaceMovableObject(Texture("badlogic-very-small.png"), mass = 1f)
+        moon = SpaceMovableImageObject(Texture("badlogic-very-small.png"), mass = 1f)
         moon!!.position = Vector2(140f, 370f)
         moon!!.forces.add(GravityForce)
         //moon!!.forces.add(ThrustForce(200, Vector2(0f,2000f)))

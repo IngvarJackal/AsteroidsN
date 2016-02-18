@@ -45,6 +45,7 @@ project(":core") {
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
     }
 }
 
