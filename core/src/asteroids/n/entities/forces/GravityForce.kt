@@ -7,9 +7,9 @@ import asteroids.n.mulScalar
 import asteroids.n.subImmut
 
 object GravityForce: EngineForce {
-    val G = 1e-2f // gravitational constant
+    val G = 1e-2f*2 // gravitational constant
 
-    val MIN_FORCE = 0.5f*G
+    val MIN_FORCE = 0.001f*G
     val MAX_FORCE = 50f*G
 
     override fun apply(obj: EngineObject, engine: Engine) {

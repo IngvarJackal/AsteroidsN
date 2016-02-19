@@ -7,6 +7,8 @@ interface EngineObject {
     val mass: Float
     var position: Vector2
     var velocity: Vector2
+    var rotationAngle: Float
+    var rotationSpeed: Float
     val forces: MutableSet<EngineForce>
 }
 interface MovableEngineObject: EngineObject

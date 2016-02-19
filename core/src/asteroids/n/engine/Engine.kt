@@ -11,6 +11,7 @@ import java.util.*
 class Engine(val msDelay: Float) {
     val REGULARIZATION = 1e3f // to slow down because of ms
     val MAX_SPEED = 2000/REGULARIZATION
+    val MAX_ROTATION = 360*3f/msDelay
 
     internal val movableObjects: MutableSet<MovableEngineObject> = HashSet()
     internal val staticObjects: MutableSet<StaticEngineObject> = HashSet()
@@ -38,8 +39,8 @@ class Engine(val msDelay: Float) {
             for (force in HashSet(movableObject.forces)) {
                 force.apply(movableObject, this)
             }
-            System.out.println("Speed ${normalizeSpeed(movableObject.velocity.mulScalar(msDelay/REGULARIZATION))}")
             movableObject.position = movableObject.position.addImmut(normalizeSpeed(movableObject.velocity.mulScalar(msDelay/REGULARIZATION)))
+            movableObject.rotationAngle = (movableObject.rotationAngle + normalizeRotation(movableObject.rotationSpeed*msDelay/REGULARIZATION)) % 360
         }
     }
 
@@ -48,5 +49,9 @@ class Engine(val msDelay: Float) {
             return speed.mulScalar(MAX_SPEED/speed.len())
         else
             return speed
+    }
+
+    internal fun normalizeRotation(rotation: Float): Float {
+        return Math.min(MAX_ROTATION, rotation)
     }
 }

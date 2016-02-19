@@ -2,9 +2,11 @@ package asteroids.n
 
 import asteroids.n.engine.Engine
 import asteroids.n.entities.forces.GravityForce
+import asteroids.n.entities.forces.RotationForce
 import asteroids.n.entities.forces.ThrustForce
-import asteroids.n.entities.objects.SpaceMovableImageObject
-import asteroids.n.entities.objects.SpaceStaticAnimatedObject
+import asteroids.n.entities.objects.*
+import asteroids.n.utils.createAsteroid
+import asteroids.n.utils.drawLine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -14,15 +16,18 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import asteroids.n.entities.objects.SpaceStaticImageObject
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.TimeUtils
 import java.util.*
 
 class MainClass : ApplicationAdapter() {
     internal var batch: SpriteBatch? = null
-    internal var earth: SpaceStaticAnimatedObject? = null
-    internal var moon: SpaceMovableImageObject? = null
+
+    internal var earth: Earth? = null
+    internal var moon: Moon? = null
+    internal var spaceship: PlayerShip? = null
+
+    internal var asteroid: Asteroid? = null
 
     internal var cam: OrthographicCamera? = null
     internal var shapeRenderer: ShapeRenderer? = null
@@ -32,15 +37,22 @@ class MainClass : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
 
-        earth = SpaceStaticAnimatedObject("earth", msFrameDelay=1000, mass = 100000f)
-        earth!!.position = Vector2(360f, 360f)
-        earth!!.sprite.rotation = 45f
+        earth = Earth()
+        moon = Moon()
+        spaceship = PlayerShip()
+        spaceship!!.position = Vector2(160f, 360f)
+        spaceship!!.forces.add(ThrustForce(200, Vector2(-35f, 55f)))
+        spaceship!!.forces.add(GravityForce)
+        asteroid = createAsteroid(4f, 1f)
+        asteroid!!.position = Vector2(260f, 260f)
+        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, -7f)))
+        asteroid!!.forces.add(RotationForce(200, 25f))
+        asteroid!!.forces.add(GravityForce)
 
-        moon = SpaceMovableImageObject(Texture("badlogic-very-small.png"), mass = 1f)
-        moon!!.position = Vector2(140f, 370f)
-        moon!!.forces.add(GravityForce)
-        //moon!!.forces.add(ThrustForce(200, Vector2(0f,2000f)))
-        moon!!.forces.add(ThrustForce(200, Vector2(0f,50f)))
+        physEngine.registerObject(earth!!)
+        physEngine.registerObject(moon!!)
+        physEngine.registerObject(spaceship!!)
+        physEngine.registerObject(asteroid!!)
 
         cam = OrthographicCamera()
         cam!!.setToOrtho(true, 720f, 720f);
@@ -48,37 +60,27 @@ class MainClass : ApplicationAdapter() {
         shapeRenderer = ShapeRenderer()
         shapeRenderer!!.setProjectionMatrix(cam!!.combined)
         shapeRenderer!!.setAutoShapeType(true)
-
-        physEngine.registerObject(earth!!)
-        physEngine.registerObject(moon!!)
     }
 
     var lastPosition: MutableList<Vector2> = ArrayList()
     override fun render() {
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         physEngine.step()
 
-        lastPosition.add(moon!!.position)
+        lastPosition.add(asteroid!!.position)
         for (i in 0..lastPosition.size-2) {
-            drawLine(lastPosition[i], lastPosition[i+1])
+            drawLine(shapeRenderer!!, lastPosition[i], lastPosition[i+1])
         }
 
         batch!!.begin();
 
         earth!!.draw(batch!!)
         moon!!.draw(batch!!)
-
-        System.out.println(moon!!.position)
+        spaceship!!.draw(batch!!)
+        asteroid!!.draw(batch!!)
 
         batch!!.end();
-    }
-
-    fun drawLine(from: Vector2, to: Vector2, color: Color = Color.BLACK) {
-        shapeRenderer!!.begin()
-        shapeRenderer!!.setColor(color);
-        shapeRenderer!!.line(from.invertY(), to.invertY())
-        shapeRenderer!!.end();
     }
 }
