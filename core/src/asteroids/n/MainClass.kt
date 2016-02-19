@@ -32,8 +32,9 @@ class MainClass : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
 
-        earth = SpaceStaticAnimatedObject("earth", msFrameDelay=5000, mass = 100000f)
+        earth = SpaceStaticAnimatedObject("earth", msFrameDelay=1000, mass = 100000f)
         earth!!.position = Vector2(360f, 360f)
+        earth!!.sprite.rotation = 45f
 
         moon = SpaceMovableImageObject(Texture("badlogic-very-small.png"), mass = 1f)
         moon!!.position = Vector2(140f, 370f)

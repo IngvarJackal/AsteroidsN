@@ -15,7 +15,7 @@ fun loadImages(dirname: String):com.badlogic.gdx.utils.Array<TextureRegion> {
     val filenum = Gdx.files.local(dirname+"/").list().size
     val result = com.badlogic.gdx.utils.Array<TextureRegion>(filenum)
     for (i in 1..filenum) {
-        result.add(TextureRegion(Texture("${dirname}/${(i).toString().padStart(2, '0')}.png")))
+        result.add(TextureRegion(Texture("${dirname}/${(i).toString().padStart(3, '0')}.png")))
     }
     return result
 }
