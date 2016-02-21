@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 
 class Asteroid(mass: Float, val asteroidTextures: com.badlogic.gdx.utils.Array<TextureRegion>) : SpaceObject(mass), MovableEngineObject {
     override val sprite: Sprite = Sprite(asteroidTextures[0])
+    override val size = Math.max(sprite.height/2, sprite.width/2)
 
     override fun draw(batch: Batch) {
         for (texture in asteroidTextures)

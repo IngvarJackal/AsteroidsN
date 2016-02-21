@@ -49,8 +49,10 @@ class Engine(val msDelay: Float) {
             allObjects.remove(movableObject)
             for (anotherObject in allObjects) {
                 val collision = checkCollision(movableObject, anotherObject)
-                if (collision != null)
+                if (collision != null) {
+                    System.out.println("collision between ${anotherObject} and ${movableObject}")
                     movableObject.collisions.add(Pair(collision, anotherObject))
+                }
             }
         }
     }
@@ -58,6 +60,7 @@ class Engine(val msDelay: Float) {
     internal fun checkCollision(obj1: EngineObject, obj2: EngineObject):Direction? {
         val diff = obj2.position.subImmut(obj1.position)
         val totSize = obj1.size + obj2.size
+        System.out.println("LEN = ${diff.len()}, needed = ${totSize}")
         if (diff.len() <= totSize) {
             if (diff.y > 0 && diff.y > Math.abs(diff.x))
                 return Direction.UP

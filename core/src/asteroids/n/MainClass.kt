@@ -40,11 +40,11 @@ class MainClass : ApplicationAdapter() {
         moon = Moon()
         spaceship = PlayerShip()
         spaceship!!.position = Vector2(160f, 360f)
-        spaceship!!.forces.add(ThrustForce(200, Vector2(-35f, 55f)))
+        spaceship!!.forces.add(ThrustForce(200, Vector2(-30f, 50f)))
         spaceship!!.forces.add(GravityForce)
         asteroid = createAsteroid(4f, 1f)
         asteroid!!.position = Vector2(260f, 260f)
-        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, -7f)))
+        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, -6f)))
         asteroid!!.forces.add(RotationForce(200, 25f))
         asteroid!!.forces.add(GravityForce)
 
