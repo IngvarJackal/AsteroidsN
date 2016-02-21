@@ -4,20 +4,19 @@ import asteroids.n.engine.Engine
 import asteroids.n.entities.forces.GravityForce
 import asteroids.n.entities.forces.RotationForce
 import asteroids.n.entities.forces.ThrustForce
-import asteroids.n.entities.objects.*
+import asteroids.n.entities.objects.Asteroid
+import asteroids.n.entities.objects.Earth
+import asteroids.n.entities.objects.Moon
+import asteroids.n.entities.objects.PlayerShip
 import asteroids.n.utils.createAsteroid
 import asteroids.n.utils.drawLine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.utils.TimeUtils
 import java.util.*
 
 class MainClass : ApplicationAdapter() {

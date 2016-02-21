@@ -10,6 +10,13 @@ interface EngineObject {
     var rotationAngle: Float
     var rotationSpeed: Float
     val forces: MutableSet<EngineForce>
+    val collisions: MutableSet<Pair<Direction, EngineObject>>
+    val size: Float
 }
+
+enum class Direction {
+    UP, DOWN, LEFT, RIGHT
+}
+
 interface MovableEngineObject: EngineObject
 interface StaticEngineObject: EngineObject

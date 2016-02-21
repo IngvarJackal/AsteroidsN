@@ -1,13 +1,15 @@
 package asteroids.n.entities.objects
 
 import asteroids.n.engine.forces.EngineForce
+import asteroids.n.engine.objects.Direction
 import asteroids.n.engine.objects.EngineObject
 import asteroids.n.engine.objects.MovableEngineObject
 import asteroids.n.engine.objects.StaticEngineObject
 import asteroids.n.utils.loadImages
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite
 import java.util.*
@@ -33,6 +35,7 @@ abstract class SpaceObject(override val mass: Float): EngineObject {
     override var rotationSpeed: Float = 0f
 
     override var forces: MutableSet<EngineForce> = HashSet()
+    override val collisions: MutableSet<Pair<Direction, MovableEngineObject>> = HashSet()
 
     abstract fun draw(batch: Batch)
 }
