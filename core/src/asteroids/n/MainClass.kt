@@ -1,9 +1,7 @@
 package asteroids.n
 
 import asteroids.n.engine.Engine
-import asteroids.n.entities.forces.GravityForce
-import asteroids.n.entities.forces.RotationForce
-import asteroids.n.entities.forces.ThrustForce
+import asteroids.n.entities.forces.*
 import asteroids.n.entities.objects.Asteroid
 import asteroids.n.entities.objects.Earth
 import asteroids.n.entities.objects.Moon
@@ -37,16 +35,21 @@ class MainClass : ApplicationAdapter() {
         batch = SpriteBatch()
 
         earth = Earth()
+
         moon = Moon()
+
         spaceship = PlayerShip()
-        spaceship!!.position = Vector2(160f, 360f)
-        spaceship!!.forces.add(ThrustForce(200, Vector2(-30f, 50f)))
-        spaceship!!.forces.add(GravityForce)
+        spaceship!!.position = Vector2(120f, 350f)
+        spaceship!!.forces.add(ThrustForce(200, Vector2(0f, 50f)))
+        spaceship!!.forces.add(MoonGravityForce)
+        spaceship!!.forces.add(EarthGravityForce)
+
         asteroid = createAsteroid(4f, 1f)
         asteroid!!.position = Vector2(260f, 260f)
-        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, -6f)))
+        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, 30f)))
         asteroid!!.forces.add(RotationForce(200, 25f))
-        asteroid!!.forces.add(GravityForce)
+        asteroid!!.forces.add(MoonGravityForce)
+        asteroid!!.forces.add(EarthGravityForce)
 
         physEngine.registerObject(earth!!)
         physEngine.registerObject(moon!!)
@@ -68,7 +71,7 @@ class MainClass : ApplicationAdapter() {
 
         physEngine.step()
 
-        lastPosition.add(asteroid!!.position)
+        lastPosition.add(spaceship!!.position)
         for (i in 0..lastPosition.size-2) {
             drawLine(shapeRenderer!!, lastPosition[i], lastPosition[i+1])
         }
