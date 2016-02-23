@@ -15,6 +15,13 @@ fun drawLine(shapeRenderer: ShapeRenderer, from: Vector2, to: Vector2, color: Co
     shapeRenderer.end();
 }
 
+fun drawCircle(shapeRenderer: ShapeRenderer, pos: Vector2, radius: Float = 0.4f, color: Color = Color.WHITE) {
+    shapeRenderer.begin()
+    shapeRenderer.setColor(color);
+    shapeRenderer.circle(pos.x, Gdx.graphics.height-pos.y, radius)
+    shapeRenderer.end();
+}
+
 fun loadImages(dirname: String):com.badlogic.gdx.utils.Array<TextureRegion> {
     val filenum = Gdx.files.local(dirname+"/").list().size
     val result = com.badlogic.gdx.utils.Array<TextureRegion>(filenum)

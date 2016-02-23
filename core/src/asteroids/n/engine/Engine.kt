@@ -1,10 +1,12 @@
 package asteroids.n.engine
 
 import asteroids.n.addImmut
+import asteroids.n.engine.forces.EngineForce
 import asteroids.n.engine.objects.Direction
 import asteroids.n.engine.objects.EngineObject
 import asteroids.n.engine.objects.MovableEngineObject
 import asteroids.n.engine.objects.StaticEngineObject
+import asteroids.n.entities.objects.PlayerShip
 import asteroids.n.mulScalar
 import asteroids.n.subImmut
 import com.badlogic.gdx.math.Vector2
@@ -36,10 +38,23 @@ class Engine(val msDelay: Float) {
             return // just pass
     }
 
+    fun tracePlayerPath(ship: PlayerShip, steps: Int = 2000, steplen: Int = (msDelay*2).toInt()): MutableList<Vector2> {
+        val resultArray:MutableList<Vector2> = ArrayList(steps)
+        val shipCopy = ship.partialEngineClone()
+        for (i in 1..steps) {
+            for (force in HashSet(shipCopy.forces)) {
+                force.apply(shipCopy, this, steplen/1000f)
+            }
+            shipCopy.position = shipCopy.position.addImmut(normalizeSpeed(shipCopy.velocity.mulScalar(steplen/REGULARIZATION)))
+            resultArray.add(shipCopy.position)
+        }
+        return resultArray
+    }
+
     internal fun makeStep() {
         for (movableObject in movableObjects) {
             for (force in HashSet(movableObject.forces)) {
-                force.apply(movableObject, this)
+                force.apply(movableObject, this, msDelay/1000)
             }
             movableObject.position = movableObject.position.addImmut(normalizeSpeed(movableObject.velocity.mulScalar(msDelay/REGULARIZATION)))
             movableObject.rotationAngle = (movableObject.rotationAngle + normalizeRotation(movableObject.rotationSpeed*msDelay/REGULARIZATION)) % 360

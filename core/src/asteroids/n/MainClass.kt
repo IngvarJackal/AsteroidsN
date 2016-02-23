@@ -6,14 +6,19 @@ import asteroids.n.entities.objects.Asteroid
 import asteroids.n.entities.objects.Earth
 import asteroids.n.entities.objects.Moon
 import asteroids.n.entities.objects.PlayerShip
+import asteroids.n.logic.processPlayerInput
 import asteroids.n.utils.createAsteroid
+import asteroids.n.utils.drawCircle
 import asteroids.n.utils.drawLine
+import asteroids.n.utils.handlePlayerInput
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import java.util.*
 
@@ -40,7 +45,7 @@ class MainClass : ApplicationAdapter() {
 
         spaceship = PlayerShip()
         spaceship!!.position = Vector2(120f, 350f)
-        spaceship!!.forces.add(ThrustForce(200, Vector2(0f, 50f)))
+        spaceship!!.forces.add(ThrustForce(200, Vector2(0f, 300f)))
         spaceship!!.forces.add(MoonGravityForce)
         spaceship!!.forces.add(EarthGravityForce)
 
@@ -57,32 +62,49 @@ class MainClass : ApplicationAdapter() {
         physEngine.registerObject(asteroid!!)
 
         cam = OrthographicCamera()
-        cam!!.setToOrtho(true, 720f, 720f);
+        cam!!.setToOrtho(true, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat());
         cam!!.update()
         shapeRenderer = ShapeRenderer()
         shapeRenderer!!.setProjectionMatrix(cam!!.combined)
         shapeRenderer!!.setAutoShapeType(true)
     }
 
-    var lastPosition: MutableList<Vector2> = ArrayList()
+    var timePassed: Float = Float.POSITIVE_INFINITY
+    var tracedTrajectory: MutableList<Vector2>? = null
+    fun renderTrajectory(spaceship: PlayerShip, shapeRenderer: ShapeRenderer) {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        timePassed += Gdx.graphics.deltaTime
+        if (timePassed >= 1/1f) {
+            timePassed = 0f
+            tracedTrajectory = physEngine.tracePlayerPath(spaceship)
+        }
+        for (pointNum in 0..tracedTrajectory!!.size-1) {
+
+            drawCircle(shapeRenderer, tracedTrajectory!!.get(pointNum),
+                    color=Color(0f,
+                                0.9f,
+                                0.9f,
+                                Math.sqrt((0.9*tracedTrajectory!!.size - pointNum)/tracedTrajectory!!.size).toFloat()))
+        }
+    }
     override fun render() {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         physEngine.step()
 
-        lastPosition.add(spaceship!!.position)
-        for (i in 0..lastPosition.size-2) {
-            drawLine(shapeRenderer!!, lastPosition[i], lastPosition[i+1])
-        }
+        processPlayerInput(spaceship!!)
 
-        batch!!.begin();
+        renderTrajectory(spaceship!!, shapeRenderer!!)
+
+
+        batch!!.begin()
 
         earth!!.draw(batch!!)
         moon!!.draw(batch!!)
         spaceship!!.draw(batch!!)
         asteroid!!.draw(batch!!)
 
-        batch!!.end();
+        batch!!.end()
     }
 }

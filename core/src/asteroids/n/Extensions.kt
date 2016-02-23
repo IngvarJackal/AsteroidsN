@@ -18,3 +18,16 @@ fun Vector2.subImmut(vector2: Vector2):Vector2 {
 fun Vector2.addImmut(vector2: Vector2):Vector2 {
     return Vector2(this.x + vector2.x, this.y + vector2.y)
 }
+
+fun Vector2.rotate90(clockwise: Boolean):Vector2 {
+    val x = this.x
+    val y = this.y
+    if (clockwise) {
+        this.x = y
+        this.y = -x
+    } else {
+        this.x = -y
+        this.y = x
+    }
+    return this
+}

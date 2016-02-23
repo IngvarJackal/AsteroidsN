@@ -8,17 +8,14 @@ import com.badlogic.gdx.utils.TimeUtils
 
 abstract class TimeLimitedForce(val timeMs: Long) : EngineForce {
 
-    abstract fun actualAction(obj: EngineObject, engine: Engine)
+    abstract fun actualAction(obj: EngineObject, engine: Engine, timedelta: Float)
 
-    var time: Long? = null
-    override fun apply(obj: EngineObject, engine: Engine) {
-        if (time == null)
-            time = TimeUtils.millis()
-        else {
-            actualAction(obj, engine)
-            if (System.currentTimeMillis() - time!! >= timeMs) {
-                obj.forces.remove(this)
-            }
+    var time: Long = 0
+    override fun apply(obj: EngineObject, engine: Engine, timedelta: Float) {
+        time += (timedelta*1000).toLong()
+        actualAction(obj, engine, timedelta)
+        if (time >= timeMs) {
+            obj.forces.remove(this)
         }
     }
 }
