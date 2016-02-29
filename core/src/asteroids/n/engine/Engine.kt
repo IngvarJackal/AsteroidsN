@@ -42,9 +42,10 @@ class Engine(val msDelay: Float) {
         val resultArray:MutableList<Vector2> = ArrayList(steps)
         val shipCopy = ship.partialEngineClone()
         for (i in 1..steps) {
-            for (force in HashSet(shipCopy.forces)) {
-                force.apply(shipCopy, this, steplen/1000f)
-            }
+            val iterator = shipCopy.forces.iterator()
+            while (iterator.hasNext())
+                if (iterator.next().applyAndDelete(shipCopy, this, steplen/1000f))
+                    iterator.remove()
             shipCopy.position = shipCopy.position.addImmut(normalizeSpeed(shipCopy.velocity.mulScalar(steplen/REGULARIZATION)))
             resultArray.add(shipCopy.position)
         }
@@ -53,9 +54,11 @@ class Engine(val msDelay: Float) {
 
     internal fun makeStep() {
         for (movableObject in movableObjects) {
-            for (force in HashSet(movableObject.forces)) {
-                force.apply(movableObject, this, msDelay/1000)
-            }
+            val iterator = movableObject.forces.iterator()
+            while (iterator.hasNext())
+                if (iterator.next().applyAndDelete(movableObject, this, msDelay/1000))
+                    iterator.remove()
+
             movableObject.position = movableObject.position.addImmut(normalizeSpeed(movableObject.velocity.mulScalar(msDelay/REGULARIZATION)))
             movableObject.rotationAngle = (movableObject.rotationAngle + normalizeRotation(movableObject.rotationSpeed*msDelay/REGULARIZATION)) % 360
 

@@ -11,11 +11,9 @@ abstract class TimeLimitedForce(val timeMs: Long) : EngineForce {
     abstract fun actualAction(obj: EngineObject, engine: Engine, timedelta: Float)
 
     var time: Long = 0
-    override fun apply(obj: EngineObject, engine: Engine, timedelta: Float) {
+    override fun applyAndDelete(obj: EngineObject, engine: Engine, timedelta: Float): Boolean {
         time += (timedelta*1000).toLong()
         actualAction(obj, engine, timedelta)
-        if (time >= timeMs) {
-            obj.forces.remove(this)
-        }
+        return time >= timeMs
     }
 }

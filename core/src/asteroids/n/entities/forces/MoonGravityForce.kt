@@ -19,7 +19,7 @@ object MoonGravityForce : EngineForce {
     val MAX_FORCE = 50f*G
     val GRAVITY_RADIUS = 90 // px
 
-    override fun apply(obj: EngineObject, engine: Engine, timedelta: Float) {
+    override fun applyAndDelete(obj: EngineObject, engine: Engine, timedelta: Float): Boolean {
         for (gravitySource in engine.staticObjects) {
             if (gravitySource !is Moon)
                 continue
@@ -31,5 +31,6 @@ object MoonGravityForce : EngineForce {
                 obj.velocity.add(normal.mulScalar(vevMult / distance * timedelta))
             }
         }
+        return false;
     }
 }

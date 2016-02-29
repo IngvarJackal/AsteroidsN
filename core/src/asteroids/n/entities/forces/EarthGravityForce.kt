@@ -19,7 +19,7 @@ object EarthGravityForce: EngineForce {
     val MIN_FORCE = 0f*G
     val MAX_FORCE = 50f*G
 
-    override fun apply(obj: EngineObject, engine: Engine, timedelta: Float) {
+    override fun applyAndDelete(obj: EngineObject, engine: Engine, timedelta: Float): Boolean {
         var distanceToTheMoon = Float.POSITIVE_INFINITY
         for (gravitySource in engine.staticObjects) {
             if (gravitySource is Moon)
@@ -38,5 +38,6 @@ object EarthGravityForce: EngineForce {
             vevMult = Math.max(Math.min(MAX_FORCE, vevMult), MIN_FORCE) // for smooth gameplay let's limit speed
             obj.velocity.add(normal.mulScalar(vevMult/distance*timedelta))
         }
+        return false;
     }
 }

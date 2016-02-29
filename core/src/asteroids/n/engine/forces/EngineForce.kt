@@ -4,6 +4,6 @@ import asteroids.n.engine.Engine
 import asteroids.n.engine.objects.EngineObject
 
 interface EngineForce {
-    fun apply(obj: EngineObject, engine: Engine, timedelta: Float)
+    fun applyAndDelete(obj: EngineObject, engine: Engine, timedelta: Float): Boolean
     fun engineClone(): EngineForce
 }
