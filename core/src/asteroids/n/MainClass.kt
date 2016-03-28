@@ -2,10 +2,7 @@ package asteroids.n
 
 import asteroids.n.engine.Engine
 import asteroids.n.entities.forces.*
-import asteroids.n.entities.objects.Asteroid
-import asteroids.n.entities.objects.Earth
-import asteroids.n.entities.objects.Moon
-import asteroids.n.entities.objects.PlayerShip
+import asteroids.n.entities.objects.*
 import asteroids.n.logic.processPlayerInput
 import asteroids.n.utils.createAsteroid
 import asteroids.n.utils.drawCircle
@@ -33,6 +30,8 @@ class MainClass : ApplicationAdapter() {
     internal var shapeRenderer: ShapeRenderer? = null
 
     internal var asteroids: MutableList<Asteroid> = ArrayList()
+
+    internal var bullets: MutableList<Bullet> = ArrayList()
 
     internal val physEngine = Engine(1000/60f); // 60 Hz interval in ms
 
@@ -70,7 +69,7 @@ class MainClass : ApplicationAdapter() {
 
         physEngine.step()
 
-        processPlayerInput(spaceship!!)
+        processPlayerInput(spaceship!!, bullets, physEngine!!)
 
         renderTrajectory(spaceship!!, shapeRenderer!!)
 
@@ -82,6 +81,9 @@ class MainClass : ApplicationAdapter() {
 
         for (asteroid: Asteroid in asteroids)
             asteroid.draw(batch!!)
+
+        for (bullet: Bullet in bullets)
+            bullet.draw(batch!!)
 
         batch!!.end()
     }

@@ -28,11 +28,6 @@ class Engine(val msDelay: Float) {
         }
     }
 
-    fun registerObjects(obj: Array<EngineObject>) {
-        for (o: EngineObject in obj)
-            registerObject(o)
-    }
-
     internal var lastRunTime: Long = 0L
     fun step() {
         if (System.currentTimeMillis() - lastRunTime >= msDelay) {
