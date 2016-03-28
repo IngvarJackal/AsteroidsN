@@ -28,6 +28,14 @@ class Engine(val msDelay: Float) {
         }
     }
 
+    fun unregisterObject(obj: EngineObject) {
+        when (obj) {
+            is MovableEngineObject -> {movableObjects.remove(obj)}
+            is StaticEngineObject -> {staticObjects.remove(obj)}
+            else -> {throw IllegalArgumentException("Must be StaticEngineObject or MovableEngineObject!")}
+        }
+    }
+
     internal var lastRunTime: Long = 0L
     fun step() {
         if (System.currentTimeMillis() - lastRunTime >= msDelay) {

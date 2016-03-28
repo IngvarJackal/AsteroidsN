@@ -4,20 +4,20 @@ import asteroids.n.engine.Engine
 import asteroids.n.entities.forces.*
 import asteroids.n.entities.objects.*
 import asteroids.n.logic.processPlayerInput
-import asteroids.n.utils.createAsteroid
-import asteroids.n.utils.drawCircle
-import asteroids.n.utils.drawLine
-import asteroids.n.utils.handlePlayerInput
+import asteroids.n.utils.*
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import java.util.*
+import kotlin.system.exitProcess
 
 class MainClass : ApplicationAdapter() {
     internal var batch: SpriteBatch? = null
@@ -62,30 +62,35 @@ class MainClass : ApplicationAdapter() {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (!maybeKillPlayer(spaceship!!)) {
 
-        createRandomAsteroid()
+            Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        physEngine.step()
+            createRandomAsteroid()
 
-        processPlayerInput(spaceship!!, bullets, physEngine!!)
+            physEngine.step()
 
-        renderTrajectory(spaceship!!, shapeRenderer!!)
+            checkBullets(bullets, physEngine)
 
-        batch!!.begin()
+            processPlayerInput(spaceship!!, bullets, physEngine)
 
-        earth!!.draw(batch!!)
-        moon!!.draw(batch!!)
-        spaceship!!.draw(batch!!)
+            renderTrajectory(spaceship!!, shapeRenderer!!)
 
-        for (asteroid: Asteroid in asteroids)
-            asteroid.draw(batch!!)
+            batch!!.begin()
 
-        for (bullet: Bullet in bullets)
-            bullet.draw(batch!!)
+            earth!!.draw(batch!!)
+            moon!!.draw(batch!!)
+            spaceship!!.draw(batch!!)
 
-        batch!!.end()
+            for (asteroid: Asteroid in asteroids)
+                asteroid.draw(batch!!)
+
+            for (bullet: Bullet in bullets)
+                bullet.draw(batch!!)
+
+            batch!!.end()
+        }
     }
 
     var timePassed2: Float = Float.POSITIVE_INFINITY
@@ -123,6 +128,17 @@ class MainClass : ApplicationAdapter() {
                                 0.9f,
                                 0.9f,
                                 Math.sqrt((0.9*tracedTrajectory!!.size - pointNum)/tracedTrajectory!!.size).toFloat()))
+        }
+    }
+
+    fun maybeKillPlayer(spaceship: PlayerShip): Boolean {
+        if (spaceship.collisions.isNotEmpty()) {
+            batch!!.begin()
+            batch!!.draw(Texture("game_over.png"), Gdx.graphics.width / 2f - 300f, Gdx.graphics.height / 2f);
+            batch!!.end()
+            return true;
+        } else {
+            return false
         }
     }
 }
