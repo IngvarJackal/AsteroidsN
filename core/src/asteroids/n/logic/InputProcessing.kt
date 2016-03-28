@@ -8,7 +8,7 @@ import asteroids.n.utils.handlePlayerInput
 import com.badlogic.gdx.Gdx
 
 val SPEED_IMPULSE_DELAY = 0.25f // sec
-val SPEED_IMPULSE_AMOUNT = 4f
+val SPEED_IMPULSE_AMOUNT = 5f
 private var curtime = 0f
 fun processPlayerInput(ship: PlayerShip) {
     handlePlayerInput()

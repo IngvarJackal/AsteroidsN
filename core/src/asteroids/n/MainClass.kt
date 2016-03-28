@@ -29,10 +29,10 @@ class MainClass : ApplicationAdapter() {
     internal var moon: Moon? = null
     internal var spaceship: PlayerShip? = null
 
-    internal var asteroid: Asteroid? = null
-
     internal var cam: OrthographicCamera? = null
     internal var shapeRenderer: ShapeRenderer? = null
+
+    internal var asteroids: MutableList<Asteroid> = ArrayList()
 
     internal val physEngine = Engine(1000/60f); // 60 Hz interval in ms
 
@@ -45,21 +45,13 @@ class MainClass : ApplicationAdapter() {
 
         spaceship = PlayerShip()
         spaceship!!.position = Vector2(120f, 350f)
-        spaceship!!.forces.add(ThrustForce(200, Vector2(0f, 300f)))
+        spaceship!!.forces.add(ThrustForce(200, Vector2(50f, 275f)))
         spaceship!!.forces.add(MoonGravityForce)
         spaceship!!.forces.add(EarthGravityForce)
-
-        asteroid = createAsteroid(4f, 1f)
-        asteroid!!.position = Vector2(260f, 260f)
-        asteroid!!.forces.add(ThrustForce(200, Vector2(0f, 30f)))
-        asteroid!!.forces.add(RotationForce(200, 25f))
-        asteroid!!.forces.add(MoonGravityForce)
-        asteroid!!.forces.add(EarthGravityForce)
 
         physEngine.registerObject(earth!!)
         physEngine.registerObject(moon!!)
         physEngine.registerObject(spaceship!!)
-        physEngine.registerObject(asteroid!!)
 
         cam = OrthographicCamera()
         cam!!.setToOrtho(true, Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat());
@@ -67,6 +59,50 @@ class MainClass : ApplicationAdapter() {
         shapeRenderer = ShapeRenderer()
         shapeRenderer!!.setProjectionMatrix(cam!!.combined)
         shapeRenderer!!.setAutoShapeType(true)
+
+    }
+
+    override fun render() {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        createRandomAsteroid()
+
+        physEngine.step()
+
+        processPlayerInput(spaceship!!)
+
+        renderTrajectory(spaceship!!, shapeRenderer!!)
+
+        batch!!.begin()
+
+        earth!!.draw(batch!!)
+        moon!!.draw(batch!!)
+        spaceship!!.draw(batch!!)
+
+        for (asteroid: Asteroid in asteroids)
+            asteroid.draw(batch!!)
+
+        batch!!.end()
+    }
+
+    var timePassed2: Float = Float.POSITIVE_INFINITY
+    fun createRandomAsteroid() {
+        timePassed2 += Gdx.graphics.deltaTime
+        if (timePassed2 >= 10f) {
+            timePassed2 = 0f
+
+            for (i in 0..1) {
+                val asteroid = createAsteroid(mass = 4f, massVariance = 1f)
+                asteroid.position = Vector2(MathUtils.random(0f, Gdx.graphics.width / 2f - 150) + MathUtils.random(0, 2) * (Gdx.graphics.width / 2f + 150), MathUtils.random(-5f, -25f))
+                asteroid.forces.add(ThrustForce(200, Vector2(MathUtils.random(0, Gdx.graphics.width) / 4f, MathUtils.random(0, Gdx.graphics.width) / 4f)))
+                asteroid.forces.add(RotationForce(200, MathUtils.random(-40f, 40f)))
+                asteroid.forces.add(MoonGravityForce)
+                asteroid.forces.add(EarthGravityForce)
+                asteroids.add(asteroid)
+                physEngine.registerObject(asteroid)
+            }
+        }
     }
 
     var timePassed: Float = Float.POSITIVE_INFINITY
@@ -86,25 +122,5 @@ class MainClass : ApplicationAdapter() {
                                 0.9f,
                                 Math.sqrt((0.9*tracedTrajectory!!.size - pointNum)/tracedTrajectory!!.size).toFloat()))
         }
-    }
-    override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        physEngine.step()
-
-        processPlayerInput(spaceship!!)
-
-        renderTrajectory(spaceship!!, shapeRenderer!!)
-
-
-        batch!!.begin()
-
-        earth!!.draw(batch!!)
-        moon!!.draw(batch!!)
-        spaceship!!.draw(batch!!)
-        asteroid!!.draw(batch!!)
-
-        batch!!.end()
     }
 }

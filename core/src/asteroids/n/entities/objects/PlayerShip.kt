@@ -1,6 +1,5 @@
 package asteroids.n.entities.objects
 
-import asteroids.n.engine.forces.EngineForce
 import com.badlogic.gdx.math.Vector2
 import java.util.*
 
