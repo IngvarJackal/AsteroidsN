@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 
 class Earth(resname: String = "earth", msFrameDelay: Long = 1000, mass: Float = 1000f) : SpaceStaticAnimatedObject(resname, msFrameDelay, mass) {
+    var health = 20
     init {
         position = Vector2(Gdx.graphics.width.toFloat()/2, Gdx.graphics.height.toFloat()/2)
     }

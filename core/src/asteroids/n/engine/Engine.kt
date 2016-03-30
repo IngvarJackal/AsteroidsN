@@ -1,7 +1,6 @@
 package asteroids.n.engine
 
 import asteroids.n.addImmut
-import asteroids.n.engine.forces.EngineForce
 import asteroids.n.engine.objects.Direction
 import asteroids.n.engine.objects.EngineObject
 import asteroids.n.engine.objects.MovableEngineObject
@@ -94,7 +93,7 @@ class Engine(val msDelay: Float) {
                 return Direction.RIGHT
             if (diff.x < 0 && diff.x < Math.abs(diff.y))
                 return Direction.LEFT
-            throw AssertionError("WTF??? diff = ${diff}, totsize = ${totSize}}")
+            return Direction.UP // overlap
         }
         return null
     }

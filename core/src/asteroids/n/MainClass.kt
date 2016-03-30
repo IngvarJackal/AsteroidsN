@@ -1,23 +1,28 @@
 package asteroids.n
 
 import asteroids.n.engine.Engine
-import asteroids.n.entities.forces.*
+import asteroids.n.entities.forces.EarthGravityForce
+import asteroids.n.entities.forces.MoonGravityForce
+import asteroids.n.entities.forces.RotationForce
+import asteroids.n.entities.forces.ThrustForce
 import asteroids.n.entities.objects.*
+import asteroids.n.logic.collideAsteroids
+import asteroids.n.logic.collideBullets
 import asteroids.n.logic.processPlayerInput
-import asteroids.n.utils.*
+import asteroids.n.utils.checkBullets
+import asteroids.n.utils.createAsteroid
+import asteroids.n.utils.drawCircle
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import java.util.*
-import kotlin.system.exitProcess
 
 class MainClass : ApplicationAdapter() {
     internal var batch: SpriteBatch? = null
@@ -68,6 +73,8 @@ class MainClass : ApplicationAdapter() {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             createRandomAsteroid()
+            collideAsteroids(asteroids, physEngine, bullets)
+            collideBullets(physEngine, bullets)
 
             physEngine.step()
 
@@ -100,7 +107,7 @@ class MainClass : ApplicationAdapter() {
             timePassed2 = 0f
 
             for (i in 0..1) {
-                val asteroid = createAsteroid(mass = 4f, massVariance = 1f)
+                val asteroid = createAsteroid(mass = 4.5f, massVariance = 1f)
                 asteroid.position = Vector2(MathUtils.random(0f, Gdx.graphics.width / 2f - 150) + MathUtils.random(0, 2) * (Gdx.graphics.width / 2f + 150), MathUtils.random(-5f, -25f))
                 asteroid.forces.add(ThrustForce(200, Vector2(MathUtils.random(0, Gdx.graphics.width) / 4f, MathUtils.random(0, Gdx.graphics.width) / 4f)))
                 asteroid.forces.add(RotationForce(200, MathUtils.random(-40f, 40f)))

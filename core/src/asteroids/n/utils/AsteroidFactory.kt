@@ -5,7 +5,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 
 fun createAsteroid(mass: Float, massVariance: Float):Asteroid {
-    val asteroids = loadImages("asteroids")
+    return createAsteroidFromResource(mass, massVariance, "asteroids")
+}
+
+fun createSmallAsteroid(mass: Float, massVariance: Float):Asteroid {
+    return createAsteroidFromResource(mass, massVariance, "asteroids-small")
+}
+
+fun createAsteroidFromResource(mass: Float, massVariance: Float, resource: String):Asteroid {
+    val asteroids = loadImages(resource)
     asteroids.shuffle()
     var resAsteroids = com.badlogic.gdx.utils.Array<TextureRegion>(3)
     for (i in 0..1) {
