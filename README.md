@@ -1,15 +1,17 @@
 # AsteroidsN
 It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with gravity
 
+![](https://github.com/IngvarJackal/AsteroidsN/blob/master/screenshots/screen1.png)
+
 ## Gameplay
 Player should defend Earth from asteroids
 
 ## Concepts
-* No physics for Moon -- it will move by circular orbit.
-* Earth and Moon will affect ship and asteroids.
+* No physics for Moon -- moves by circular orbit.
+* Earth and Moon affect ship and asteroids.
 * Asteroids kill player
-* Player can refuel by orbiting circular orbit over the Moon
-* Asteroids can collide and split into chunks
+* Big asteroids split up when hit
+* Player can refuel by orbiting over the Moon
 * There is helper trajectory line
 
 ## How to build
