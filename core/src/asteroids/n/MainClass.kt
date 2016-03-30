@@ -9,9 +9,8 @@ import asteroids.n.entities.objects.*
 import asteroids.n.logic.collideAsteroids
 import asteroids.n.logic.collideBullets
 import asteroids.n.logic.processPlayerInput
-import asteroids.n.utils.checkBullets
-import asteroids.n.utils.createAsteroid
-import asteroids.n.utils.drawCircle
+import asteroids.n.logic.refillEnergy
+import asteroids.n.utils.*
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -23,6 +22,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import java.util.*
+
+object Constants {
+    val EARTH_HEALTH_MAX = 20;
+    val PLAYER_ENERGY_MAX = 500f;
+}
 
 class MainClass : ApplicationAdapter() {
     internal var batch: SpriteBatch? = null
@@ -76,6 +80,8 @@ class MainClass : ApplicationAdapter() {
             collideAsteroids(asteroids, physEngine, bullets)
             collideBullets(physEngine, bullets)
 
+            refillEnergy(moon!!, spaceship!!)
+
             physEngine.step()
 
             checkBullets(bullets, physEngine)
@@ -83,6 +89,9 @@ class MainClass : ApplicationAdapter() {
             processPlayerInput(spaceship!!, bullets, physEngine)
 
             renderTrajectory(spaceship!!, shapeRenderer!!)
+
+            displayEnergy(spaceship!!)
+            displayEarthHealth(earth!!)
 
             batch!!.begin()
 
@@ -103,20 +112,23 @@ class MainClass : ApplicationAdapter() {
     var timePassed2: Float = Float.POSITIVE_INFINITY
     fun createRandomAsteroid() {
         timePassed2 += Gdx.graphics.deltaTime
-        if (timePassed2 >= 10f) {
+        if (timePassed2 >= 2f) {
             timePassed2 = 0f
 
-            for (i in 0..1) {
-                val asteroid = createAsteroid(mass = 4.5f, massVariance = 1f)
-                asteroid.position = Vector2(MathUtils.random(0f, Gdx.graphics.width / 2f - 150) + MathUtils.random(0, 2) * (Gdx.graphics.width / 2f + 150), MathUtils.random(-5f, -25f))
-                asteroid.forces.add(ThrustForce(200, Vector2(MathUtils.random(0, Gdx.graphics.width) / 4f, MathUtils.random(0, Gdx.graphics.width) / 4f)))
-                asteroid.forces.add(RotationForce(200, MathUtils.random(-40f, 40f)))
-                asteroid.forces.add(MoonGravityForce)
-                asteroid.forces.add(EarthGravityForce)
-                asteroids.add(asteroid)
-                physEngine.registerObject(asteroid)
-            }
-        }
+            var asteroid: Asteroid? = null
+
+            if (MathUtils.random(3) == 0)
+                asteroid = createAsteroid(mass = 4.5f, massVariance = 1f)
+            else
+                asteroid = createSmallAsteroid(mass = 2f, massVariance = 0.5f)
+            asteroid.position = Vector2(MathUtils.random(0f, Gdx.graphics.width / 2f - 150) + MathUtils.random(0, 2) * (Gdx.graphics.width / 2f + 150), MathUtils.random(-5f, -25f))
+            asteroid.forces.add(ThrustForce(200, Vector2(MathUtils.random(0, Gdx.graphics.width) / 4f, MathUtils.random(0, Gdx.graphics.width) / 4f)))
+            asteroid.forces.add(RotationForce(200, MathUtils.random(-40f, 40f)))
+            asteroid.forces.add(MoonGravityForce)
+            asteroid.forces.add(EarthGravityForce)
+            asteroids.add(asteroid)
+            physEngine.registerObject(asteroid)
+    }
     }
 
     var timePassed: Float = Float.POSITIVE_INFINITY
@@ -131,7 +143,7 @@ class MainClass : ApplicationAdapter() {
         for (pointNum in 0..tracedTrajectory!!.size-1) {
 
             drawCircle(shapeRenderer, tracedTrajectory!!.get(pointNum),
-                    color=Color(0f,
+                    color = Color(0f,
                                 0.9f,
                                 0.9f,
                                 Math.sqrt((0.9*tracedTrajectory!!.size - pointNum)/tracedTrajectory!!.size).toFloat()))
@@ -139,7 +151,7 @@ class MainClass : ApplicationAdapter() {
     }
 
     fun maybeKillPlayer(spaceship: PlayerShip): Boolean {
-        if (spaceship.collisions.isNotEmpty()) {
+        if (spaceship.collisions.isNotEmpty() || earth!!.health <= 0) {
             batch!!.begin()
             batch!!.draw(Texture("game_over.png"), Gdx.graphics.width / 2f - 300f, Gdx.graphics.height / 2f);
             batch!!.end()
@@ -147,5 +159,23 @@ class MainClass : ApplicationAdapter() {
         } else {
             return false
         }
+    }
+
+    fun displayEnergy(spaceship: PlayerShip) {
+        drawRectangle(shapeRenderer!!, 10f, 10f, Gdx.graphics.width.toFloat()-20, 20f)
+        drawRectangle(shapeRenderer!!, 10f, 10f, spaceship.energy*1f/Constants.PLAYER_ENERGY_MAX*(Gdx.graphics.width.toFloat()-21), 19f, Color(
+                                                                                             1f-spaceship.energy*1f/Constants.PLAYER_ENERGY_MAX,
+                                                                                             Math.sqrt(spaceship.energy*1f/Constants.PLAYER_ENERGY_MAX.toDouble()).toFloat(),
+                                                                                             0f,
+                                                                                             1f), filled=true)
+    }
+
+    fun displayEarthHealth(earth: Earth) {
+        drawRectangle(shapeRenderer!!, Gdx.graphics.width/2f - 40f, Gdx.graphics.height / 2f - 48f, 80f, 6f)
+        drawRectangle(shapeRenderer!!, Gdx.graphics.width/2f - 40f, Gdx.graphics.height / 2f - 48f, earth.health*1f/Constants.EARTH_HEALTH_MAX*80f-1, 5f, Color(
+                1f-earth.health*1f/Constants.EARTH_HEALTH_MAX,
+                earth.health*1f/Constants.EARTH_HEALTH_MAX,
+                0f,
+                1f), filled=true)
     }
 }

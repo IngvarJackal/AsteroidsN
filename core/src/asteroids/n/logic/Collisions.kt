@@ -34,9 +34,9 @@ fun collideAsteroids(asteroids: MutableList<Asteroid>, gameEngine: Engine, bulle
 fun maybeDestroyAsteroid(asteroid: Asteroid, asteroids: MutableList<Asteroid>, gameEngine: Engine, bullets: MutableList<Bullet>) {
     for (pair in asteroid.collisions.iterator()) {
         when (pair.second) {
-            is Earth -> {(pair.second as Earth).health -= StrictMath.round(10*asteroid.mass); destroyAsteroid(asteroid, asteroids, gameEngine)}
+            is Earth -> {(pair.second).health -= StrictMath.round(asteroid.mass); destroyAsteroid(asteroid, asteroids, gameEngine)}
             is Moon -> {destroyAsteroid(asteroid, asteroids, gameEngine)}
-            is Bullet -> {shootAsteroid(asteroid, asteroids, gameEngine); destroyBullet(pair.second as Bullet, bullets, gameEngine)}
+            is Bullet -> {shootAsteroid(asteroid, asteroids, gameEngine); destroyBullet(pair.second, bullets, gameEngine)}
         }
     }
 }
@@ -58,8 +58,6 @@ fun splitNdestroy(asteroid: Asteroid, factor: Float, asteroids: MutableList<Aste
 
             newAsteroid.velocity = asteroid.velocity.cpy()
             newAsteroid.velocity.add(newAsteroid.velocity.mulScalar(1f/newAsteroid.velocity.len() * 15).rotate(45f*i))
-            println("was ${asteroid.velocity}, now ${newAsteroid.velocity}")
-
             asteroids.add(newAsteroid)
             gameEngine.registerObject(newAsteroid)
         }

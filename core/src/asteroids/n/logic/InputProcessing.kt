@@ -21,10 +21,16 @@ fun processPlayerInput(ship: PlayerShip, bullets: MutableList<Bullet>, engine: E
     if (curtime >= SPEED_IMPULSE_DELAY) {
         curtime = 0f
         if (InputStatus.leftButtonPressed) {
-            createBullet(InputStatus.pointVector.subImmut(ship.position), ship, bullets, engine)
+            if (ship.energy > 30) {
+                createBullet(InputStatus.pointVector.subImmut(ship.position), ship, bullets, engine)
+                ship.energy -= 30
+            }
         }
         if (InputStatus.rightButtonPressed) {
-            ship.forces.add(ThrustForvardForce((SPEED_IMPULSE_DELAY*1000).toLong(), SPEED_IMPULSE_AMOUNT))
+            if (ship.energy > 2) {
+                ship.forces.add(ThrustForvardForce((SPEED_IMPULSE_DELAY * 1000).toLong(), SPEED_IMPULSE_AMOUNT))
+                ship.energy -= 2
+            }
         }
     }
 }
