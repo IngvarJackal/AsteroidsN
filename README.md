@@ -6,6 +6,8 @@ It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with 
 ## Gameplay
 Player should defend Earth from asteroids
 
+![](https://github.com/IngvarJackal/AsteroidsN/blob/master/screenshots/screen1.png)
+
 ## Concepts
 * No physics for Moon -- moves by circular orbit.
 * Earth and Moon affect ship and asteroids.
