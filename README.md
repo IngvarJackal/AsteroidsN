@@ -1,7 +1,7 @@
 # AsteroidsN
 It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with gravity
 
-![](https://github.com/IngvarJackal/AsteroidsN/blob/master/screenshots/screen1.png)
+
 
 ## Gameplay
 Player should defend Earth from asteroids
@@ -15,4 +15,4 @@ Player should defend Earth from asteroids
 * There is helper trajectory line
 
 ## How to build
-```./gradlew desktop:run```
+```./gradlew desktop:dist``` will generate jar in desktop/lib
