@@ -51,8 +51,8 @@ open class SpaceImageObject(internal val img: Texture, mass: Float): SpaceObject
 open class SpaceMovableImageObject(img: Texture, mass: Float) : SpaceImageObject(img, mass), MovableEngineObject
 open class SpaceStaticImageObject(img: Texture, mass: Float) : SpaceImageObject(img, mass), StaticEngineObject
 
-open class SpaceAnimatedObject(internal val resname: String, val msFrameDelay: Long, mass: Float): SpaceObject(mass) {
-    override val sprite = AnimatedSprite(Animation(msFrameDelay/1000f, loadImages(resname), Animation.PlayMode.LOOP));
+open class SpaceAnimatedObject(internal val resname: String, filenum: Int, val msFrameDelay: Long, mass: Float): SpaceObject(mass) {
+    override val sprite = AnimatedSprite(Animation(msFrameDelay/1000f, loadImages(resname, filenum), Animation.PlayMode.LOOP));
     override val size = Math.max(sprite.height/2, sprite.width/2)
 
     override fun draw(batch: Batch) {
@@ -60,5 +60,5 @@ open class SpaceAnimatedObject(internal val resname: String, val msFrameDelay: L
         sprite.update()
     }
 }
-open class SpaceMovableAnimatedObject(resname: String, msFrameDelay: Long, mass: Float) : SpaceAnimatedObject(resname, msFrameDelay, mass), MovableEngineObject
-open class SpaceStaticAnimatedObject(resname: String, msFrameDelay: Long, mass: Float) : SpaceAnimatedObject(resname, msFrameDelay, mass), StaticEngineObject
+open class SpaceMovableAnimatedObject(resname: String, filenum:Int, msFrameDelay: Long, mass: Float) : SpaceAnimatedObject(resname, filenum, msFrameDelay, mass), MovableEngineObject
+open class SpaceStaticAnimatedObject(resname: String, filenum:Int, msFrameDelay: Long, mass: Float) : SpaceAnimatedObject(resname, filenum, msFrameDelay, mass), StaticEngineObject

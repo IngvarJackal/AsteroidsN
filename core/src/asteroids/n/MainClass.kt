@@ -44,6 +44,9 @@ class MainClass : ApplicationAdapter() {
 
     internal val physEngine = Engine(1000/60f); // 60 Hz interval in ms
 
+    internal var gameOverTexture: Texture? = null
+    internal var backgroundTexture: Texture? = null
+
     override fun create() {
         batch = SpriteBatch()
 
@@ -52,8 +55,8 @@ class MainClass : ApplicationAdapter() {
         moon = Moon()
 
         spaceship = PlayerShip()
-        spaceship!!.position = Vector2(120f, 350f)
-        spaceship!!.forces.add(ThrustForce(200, Vector2(50f, 275f)))
+        spaceship!!.position = Vector2(420f, 350f)
+        spaceship!!.forces.add(ThrustForce(200, Vector2(0f, 330f)))
         spaceship!!.forces.add(MoonGravityForce)
         spaceship!!.forces.add(EarthGravityForce)
 
@@ -68,13 +71,18 @@ class MainClass : ApplicationAdapter() {
         shapeRenderer!!.setProjectionMatrix(cam!!.combined)
         shapeRenderer!!.setAutoShapeType(true)
 
+        gameOverTexture = Texture(Gdx.files.classpath("assets/game_over.png"))
+        backgroundTexture = Texture(Gdx.files.classpath("assets/background.png"))
+
     }
 
     override fun render() {
         if (!maybeKillPlayer(spaceship!!)) {
 
-            Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            batch!!.begin()
+            batch!!.draw(backgroundTexture, 0f, 0f);
+            batch!!.end()
 
             createRandomAsteroid()
             collideAsteroids(asteroids, physEngine, bullets)
@@ -153,7 +161,7 @@ class MainClass : ApplicationAdapter() {
     fun maybeKillPlayer(spaceship: PlayerShip): Boolean {
         if (spaceship.collisions.isNotEmpty() || earth!!.health <= 0) {
             batch!!.begin()
-            batch!!.draw(Texture("game_over.png"), Gdx.graphics.width / 2f - 300f, Gdx.graphics.height / 2f);
+            batch!!.draw(gameOverTexture, Gdx.graphics.width / 2f - 300f, Gdx.graphics.height / 2f);
             batch!!.end()
             return true;
         } else {

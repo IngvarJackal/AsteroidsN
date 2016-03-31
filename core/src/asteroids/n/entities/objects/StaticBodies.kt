@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 
-class Earth(resname: String = "earth", msFrameDelay: Long = 1000, mass: Float = 1000f) : SpaceStaticAnimatedObject(resname, msFrameDelay, mass) {
+class Earth(resname: String = "assets/earth", filenum: Int = 360, msFrameDelay: Long = 1000, mass: Float = 1000f) : SpaceStaticAnimatedObject(resname, filenum, msFrameDelay, mass) {
     var health = Constants.EARTH_HEALTH_MAX
     init {
         position = Vector2(Gdx.graphics.width.toFloat()/2, Gdx.graphics.height.toFloat()/2)
     }
 }
 
-class Moon(img: Texture = Texture("moon.png"), mass: Float = 250f, val radius: Float = 270f) : SpaceStaticImageObject(img, mass) {
-    val rechargingZone = Texture("moon_base.png")
+class Moon(img: Texture = Texture(Gdx.files.classpath("assets/moon.png")), mass: Float = 250f, val radius: Float = 270f) : SpaceStaticImageObject(img, mass) {
+    val rechargingZone = Texture(Gdx.files.classpath("assets/moon_base.png"))
 
     init {
         position = Vector2(360- radius, Gdx.graphics.width.toFloat()/2)

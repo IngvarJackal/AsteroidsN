@@ -4,7 +4,7 @@ import asteroids.n.Constants
 import com.badlogic.gdx.math.Vector2
 import java.util.*
 
-class PlayerShip(resname: String = "spaseship", msFrameDelay: Long = 250, mass: Float = 4f) : SpaceMovableAnimatedObject(resname, msFrameDelay, mass) {
+class PlayerShip(resname: String = "assets/spaceship", filenum: Int = 4, msFrameDelay: Long = 250, mass: Float = 4f) : SpaceMovableAnimatedObject(resname, filenum, msFrameDelay, mass) {
 
     var energy = Constants.PLAYER_ENERGY_MAX
 

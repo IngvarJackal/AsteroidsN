@@ -24,11 +24,10 @@ fun drawCircle(shapeRenderer: ShapeRenderer, pos: Vector2, radius: Float = 0.4f,
     shapeRenderer.end();
 }
 
-fun loadImages(dirname: String):com.badlogic.gdx.utils.Array<TextureRegion> {
-    val filenum = Gdx.files.local(dirname+"/").list().size
+fun loadImages(dirname: String, filenum: Int):com.badlogic.gdx.utils.Array<TextureRegion> {
     val result = com.badlogic.gdx.utils.Array<TextureRegion>(filenum)
     for (i in 1..filenum) {
-        result.add(TextureRegion(Texture("${dirname}/${(i).toString().padStart(3, '0')}.png")))
+        result.add(TextureRegion(Texture(Gdx.files.classpath("${dirname}/${(i).toString().padStart(3, '0')}.png"))))
     }
     return result
 }
