@@ -1,16 +1,14 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+        mavenLocal()
     }
     dependencies {
     }
 }
 
 allprojects {
-    apply plugin: "eclipse"
-    apply plugin: "idea"
-
     version = '1.0'
     ext {
         appName = "AsteroidsN"
@@ -23,14 +21,13 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        jcenter()
+        mavenLocal()
     }
 }
 
 project(":desktop") {
     apply plugin: "java"
-
 
     dependencies {
         compile project(":core")
@@ -42,13 +39,8 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }

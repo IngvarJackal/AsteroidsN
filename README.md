@@ -1,8 +1,6 @@
 # AsteroidsN
 It's [asteroids](https://en.wikipedia.org/wiki/Asteroids_%28video_game%29) with gravity
 
-
-
 ## Gameplay
 Player should defend Earth from asteroids
 
@@ -17,4 +15,8 @@ Player should defend Earth from asteroids
 * There is helper trajectory line
 
 ## How to build
-```./gradlew desktop:dist``` will generate jar in desktop/lib
+```./gradlew distZip``` will create zip bundle in desktop/build/distributions/
+```./gradlew installApp``` will install project to desktop/build/install/
+```./gradlew run``` will run application
+
+Also you may try ```./gradlew tasks```
