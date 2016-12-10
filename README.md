@@ -16,7 +16,10 @@ Player should defend Earth from asteroids
 
 ## How to build
 ```./gradlew distZip``` will create zip bundle in desktop/build/distributions/
+
 ```./gradlew installApp``` will install project to desktop/build/install/
-```./gradlew run``` will run application
+
+## How to run
+```./gradlew run```
 
 Also you may try ```./gradlew tasks```
