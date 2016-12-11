@@ -1,20 +1,22 @@
 buildscript {
-    ext.kotlin_version = '1.0.0'
+    ext.kotlin_version = '1.0.5'
     repositories {
         mavenCentral()
+        jcenter()
+        mavenLocal()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-apply plugin: 'kotlin'
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-sourceSets {
-    main.kotlin.srcDirs += 'src/'
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()
 }
+
+apply plugin: 'kotlin'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
